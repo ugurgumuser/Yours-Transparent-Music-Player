@@ -1,3 +1,7 @@
+# 👻 Ghost Mode: The Transparent Music Player
+**Looking for a music player that doesn't block your wallpaper?**
+**Duvar kağıdınızı kapatmayan şeffaf bir müzik çalar mı arıyorsunuz?**
+
 # 🎵 Your's Music Player
 
 **A modern, transparent, and customizable offline music player built with Python & CustomTkinter.**
