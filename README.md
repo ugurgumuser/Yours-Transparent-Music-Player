@@ -17,8 +17,8 @@
     * *(Odaklanmış bir deneyim için şık ve derin siyah (#080808) yekpare tasarım.)*
 * **👤 Personalized Experience:** The app welcomes you by name. It remembers your name and settings permanently.
     * *(Uygulama sizi isminizle karşılar. İsminizi ve ayarlarınızı kalıcı olarak hatırlar.)*
-* **📂 Local Playback:** Drag and drop support or folder selection for your MP3 library.
-    * *(MP3 arşiviniz için sürükle-bırak desteği veya klasör seçimi.)*
+* **📂 Local Playback:** Easy folder selection to load your entire MP3 library instantly.
+    * *(Tüm MP3 arşivinizi anında yüklemek için kolay klasör seçimi.)*
 * **❤️ Favorites System:** Mark your favorite songs and access them instantly.
     * *(Sevdiğiniz şarkıları favorileyin ve onlara anında erişin.)*
 
