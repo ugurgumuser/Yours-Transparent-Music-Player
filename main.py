@@ -13,12 +13,7 @@ from tkinter import filedialog
 from mutagen.mp3 import MP3
 import ctypes 
 
-# --- SÜRÜM: V1.3 (Global Release) ---
-# 1. FIX: Varsayılan isim "Uğur" yerine "Your" yapıldı.
-# 2. UI: İsim girme kutusu artık boş geliyor (Kullanıcı silmekle uğraşmasın).
-# 3. KİMLİK: İlk açılışta "Your's Music Player" olarak evrensel başlar.
-
-print("Your's Music Player Başlatılıyor (V1.3)")
+print("Your's Music Player Başlatılıyor")
 
 ctk.set_appearance_mode("Dark")
 
@@ -31,7 +26,6 @@ class MusicPlayer(ctk.CTk):
             ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
         except: pass
 
-        # --- PENCERE BOYUTLARI ---
         self.compact_width = 340  
         self.expanded_width = 640 
         self.win_height = 540     
@@ -47,7 +41,6 @@ class MusicPlayer(ctk.CTk):
         self.resizable(False, False)
         self.overrideredirect(True) 
         
-        # --- RENK VE AYARLAR ---
         self.TRANS_KEY = "#000001" 
         self.SOLID_BG = "#080808" 
         
@@ -65,7 +58,6 @@ class MusicPlayer(ctk.CTk):
         self.last_volume = 0.5 
         self.is_muted = False
         
-        # --- BURASI DEĞİŞTİ: Varsayılan isim artık "Your" ---
         self.user_name = "Your" 
         self.user_logo = "Y"   
         self.is_first_run = False 
@@ -73,7 +65,6 @@ class MusicPlayer(ctk.CTk):
         self.favorites = [] 
         self.view_mode = "ALL" 
 
-        # --- EXE PATH AYARI ---
         if getattr(sys, 'frozen', False):
             self.app_dir = os.path.dirname(sys.executable)
         else:
@@ -106,7 +97,6 @@ class MusicPlayer(ctk.CTk):
         self.progress_loop_id = None
         self.drag_lock_timer = 0 
 
-        # --- FONT AYARLARI ---
         self.font_title = ("Segoe UI", 15, "bold")
         self.font_signature = ("Segoe UI Semibold", 13) 
         self.font_icon_symbol = ("Segoe UI Symbol", 28) 
@@ -117,7 +107,6 @@ class MusicPlayer(ctk.CTk):
         self.font_mini_logo = ("Times New Roman", 20, "italic")
         self.font_info_header = ("Times New Roman", 12, "italic")
 
-        # --- ARAYÜZÜ KUR ---
         self.setup_ui()
         self.bind_events()
         
@@ -181,19 +170,16 @@ class MusicPlayer(ctk.CTk):
         self.container = ctk.CTkFrame(self, fg_color="transparent")
         self.container.pack(fill="both", expand=True)
 
-        # --- SOL PANEL (PLAYER) ---
         self.main_frame = ctk.CTkFrame(self.container, width=self.compact_width, height=self.win_height, 
                                        corner_radius=30, fg_color=self.SOLID_BG, bg_color=self.TRANS_KEY)
         self.main_frame.pack(side="left", fill="y")
         self.main_frame.pack_propagate(False)
 
-        # Üst Grip Bar
         self.grip_bar = ctk.CTkFrame(self.main_frame, height=20, fg_color="transparent")
         self.grip_bar.pack(fill="x", padx=40, pady=(15, 0))
         self.grip_indicator = ctk.CTkFrame(self.grip_bar, height=6, width=180, corner_radius=3, fg_color="#333333")
         self.grip_indicator.pack()
 
-        # Navbar
         self.navbar = ctk.CTkFrame(self.main_frame, fg_color="transparent", height=35)
         self.navbar.pack(fill="x", padx=10, pady=(10, 0))
         
@@ -218,48 +204,41 @@ class MusicPlayer(ctk.CTk):
         self.btn_min = ctk.CTkButton(self.navbar, text="—", command=lambda: [self.activate_drag_shield(), self.minimize_app()], **btn_style)
         self.btn_min.pack(side="right", padx=2)
 
-        # Liste Butonu
         self.btn_list = ctk.CTkButton(self.main_frame, text="»", width=30, height=30, 
                                       fg_color="transparent", hover_color="#222", 
                                       font=self.font_icon_symbol, text_color=self.ACCENT_COLOR,
                                       command=lambda: [self.activate_drag_shield(), self.toggle_playlist_view()])
         self.btn_list.place(x=300, y=65) 
 
-        # Favori Butonu
         self.btn_fav_main = ctk.CTkButton(self.main_frame, text="♥", width=30, height=30,
                                           font=("Arial", 22), 
                                           fg_color="transparent", hover_color="#222", text_color=self.ACCENT_COLOR,
                                           command=self.toggle_favorite_current)
         self.btn_fav_main.place(x=300, y=115) 
         
-        # Ses Barı
         self.volume_bar = ctk.CTkProgressBar(self.main_frame, orientation="vertical", width=11, height=130, fg_color="#333", progress_color=self.ACCENT_COLOR, corner_radius=6) 
         self.volume_bar.set(self.current_volume)
         self.volume_bar.place(x=20, y=115)
         self.volume_bar.bind("<Button-1>", self.update_volume_from_bar)
         self.volume_bar.bind("<B1-Motion>", self.update_volume_from_bar)
 
-        # Mute Butonu
         self.btn_mute = ctk.CTkButton(self.main_frame, text="🔊", width=25, height=25,
                                       fg_color="transparent", hover_color="#222",
                                       font=("Segoe UI Symbol", 18), text_color=self.ACCENT_COLOR,
                                       command=self.toggle_mute)
         self.btn_mute.place(x=13, y=250)
 
-        # Art Frame (Logo)
         self.art_frame = ctk.CTkFrame(self.main_frame, width=170, height=170, corner_radius=85, fg_color="transparent", border_width=0, border_color=self.ACCENT_COLOR) 
         self.art_frame.pack(pady=(40, 20)) 
         
         self.lbl_art = ctk.CTkLabel(self.art_frame, text=f" {self.user_logo} ", font=self.font_main_art, text_color=self.ACCENT_COLOR)
         self.lbl_art.place(relx=0.5, rely=0.5, anchor="center")
 
-        # Bilgi
         self.content_group = ctk.CTkFrame(self.main_frame, fg_color="transparent")
         self.content_group.pack(fill="both", expand=True)
         self.lbl_song = ctk.CTkLabel(self.content_group, text="Müzik Seçilmedi", font=self.font_title, text_color=self.ACCENT_COLOR, wraplength=280)
         self.lbl_song.pack(pady=(0, 5))
 
-        # İlerleme
         self.progress_frame = ctk.CTkFrame(self.content_group, fg_color="transparent")
         self.progress_frame.pack(fill="x", padx=20, pady=(20, 5))
         self.lbl_current_time = ctk.CTkLabel(self.progress_frame, text="0:00", font=("Arial", 10), text_color=self.ACCENT_COLOR)
@@ -271,7 +250,6 @@ class MusicPlayer(ctk.CTk):
         self.slider_progress.pack(fill="x", padx=20, pady=(0, 10))
         self.slider_progress.bind("<ButtonRelease-1>", self.on_slider_release)
 
-        # Kontroller
         self.controls_frame = ctk.CTkFrame(self.content_group, fg_color="transparent")
         self.controls_frame.pack(pady=(10, 5), fill="x", padx=15)
         self.controls_frame.grid_columnconfigure((0,1,2,3,4), weight=1)
@@ -288,7 +266,6 @@ class MusicPlayer(ctk.CTk):
         self.btn_loop = ctk.CTkButton(self.controls_frame, text="🔁", width=30, font=self.font_ctrl_icon, command=self.toggle_loop, **ctrl_style)
         self.btn_loop.grid(row=0, column=4)
 
-        # Alt Taşıma ve İmza
         self.bottom_grip_frame = ctk.CTkFrame(self.main_frame, height=20, fg_color="transparent")
         self.bottom_grip_frame.pack(side="bottom", fill="x", padx=40, pady=(0, 5))
         self.bottom_indicator = ctk.CTkFrame(self.bottom_grip_frame, height=6, width=180, corner_radius=3, fg_color="#333333")
@@ -297,14 +274,11 @@ class MusicPlayer(ctk.CTk):
         self.lbl_artist = ctk.CTkLabel(self.main_frame, text=f"{self.user_name}'s Music Player", font=self.font_signature, text_color=self.ACCENT_COLOR)
         self.lbl_artist.pack(side="bottom", pady=(0, 5))
 
-        # --- SAĞ PANEL (LİSTE) ---
         self.playlist_container = ctk.CTkFrame(self.container, corner_radius=20, fg_color=self.SOLID_BG)
         
-        # BİLGİ BAŞLIĞI
         self.lbl_info_header = ctk.CTkLabel(self.playlist_container, text="", font=("Arial", 11), text_color="gray")
         self.lbl_info_header.pack(pady=(15, 0)) 
 
-        # Tab Header
         self.tab_header = ctk.CTkFrame(self.playlist_container, height=40, fg_color="transparent")
         self.tab_header.pack(fill="x", padx=10, pady=(2, 5)) 
         
@@ -318,7 +292,6 @@ class MusicPlayer(ctk.CTk):
                                          command=lambda: self.switch_view_mode("FAV"))
         self.btn_tab_fav.pack(side="left", padx=5, expand=True, fill="x")
 
-        # Arama Çubuğu
         self.search_frame = ctk.CTkFrame(self.playlist_container, height=30, fg_color="#222222", corner_radius=15, border_width=0)
         self.search_frame.pack(fill="x", padx=20, pady=(5, 5))
         
@@ -332,7 +305,6 @@ class MusicPlayer(ctk.CTk):
                                          textvariable=self.search_var)
         self.entry_search.pack(side="left", fill="x", expand=True, padx=(0, 10))
 
-        # Liste
         self.playlist_scroll = ctk.CTkScrollableFrame(self.playlist_container, fg_color="transparent", 
                                                       scrollbar_button_color="#333", scrollbar_button_hover_color=self.ACCENT_COLOR)
         self.playlist_scroll.pack(fill="both", expand=True, padx=0, pady=(5, 20))
@@ -360,9 +332,6 @@ class MusicPlayer(ctk.CTk):
         self.entry_name = ctk.CTkEntry(self.name_window, width=200, height=40, font=("Arial", 14), justify="center")
         self.entry_name.pack(pady=5)
         
-        # --- BURASI DEĞİŞTİ: Kutu boş geliyor, Uğur yazmıyor ---
-        # self.entry_name.insert(0, self.user_name) (İPTAL EDİLDİ)
-
         btn_save = ctk.CTkButton(self.name_window, text="KAYDET VE BAŞLA", fg_color=self.ACCENT_COLOR, text_color="black", hover_color="white",
                                  command=self.save_user_name)
         btn_save.pack(pady=20)
@@ -386,7 +355,6 @@ class MusicPlayer(ctk.CTk):
         self.lbl_artist.configure(text=f"{self.user_name}'s Music Player")
         self.title(f"{self.user_name}'s Music Player")
 
-    # --- AKILLI SAYAÇ ---
     def update_info_header(self):
         if self.transparent_mode:
             self.lbl_info_header.configure(
@@ -653,7 +621,7 @@ class MusicPlayer(ctk.CTk):
             filename = os.path.basename(path)
             clean_name = self.clean_song_title(filename)
             self.lbl_song.configure(text=clean_name)
-            self.lbl_art.configure(text=f" {self.user_logo} ", text_color=self.ACCENT_COLOR) # Logo güncelleniyor
+            self.lbl_art.configure(text=f" {self.user_logo} ", text_color=self.ACCENT_COLOR) 
             self.update_fav_button_visual()
             self.time_offset = 0
             self.slider_progress.set(0)
