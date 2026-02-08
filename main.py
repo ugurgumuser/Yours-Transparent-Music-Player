@@ -13,7 +13,7 @@ from tkinter import filedialog
 from mutagen.mp3 import MP3
 import ctypes 
 
-print("Your's Music Player Başlatılıyor")
+print("Music Player Starting...")
 
 ctk.set_appearance_mode("Dark")
 
@@ -22,7 +22,7 @@ class MusicPlayer(ctk.CTk):
         super().__init__()
 
         try:
-            myappid = 'ugur.musicplayer.final.V1.3' 
+            myappid = 'ghost.musicplayer.standard.release' 
             ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
         except: pass
 
@@ -62,8 +62,10 @@ class MusicPlayer(ctk.CTk):
         self.user_logo = "Y"   
         self.is_first_run = False 
 
+        # --- KRITIK DUZELTME BURADA ---
         self.favorites = [] 
         self.view_mode = "ALL" 
+        # ------------------------------
 
         if getattr(sys, 'frozen', False):
             self.app_dir = os.path.dirname(sys.executable)
