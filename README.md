@@ -1,4 +1,4 @@
-# 👻 Ghost Mode: The Transparent Music Player
+# 👻 Ghost Mode: Ghost Transparent Music Player
 **Looking for a music player that doesn't block your wallpaper?**
 **Duvar kağıdınızı kapatmayan şeffaf bir müzik çalar mı arıyorsunuz?**
 
